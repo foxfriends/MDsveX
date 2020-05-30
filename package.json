@@ -12,11 +12,9 @@
 		"test": "uvu -r esm test test.js$",
 		"test:watch": "node -r esm ./test/_scripts/test_watch.js --verbose",
 		"test:cov": "yarn lint && jest --verbose --coverage",
-		"generate_files": "node -r esm ./test/_scripts/generate_markdown_html.js"
+		"generate_files": "node -r esm ./test/_scripts/generate_markdown_html.js",
+		"postInstall": "rollup -c"
 	},
-	"files": [
-		"dist/*"
-	],
 	"keywords": [
 		"test",
 		"preprocessor",

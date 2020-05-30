@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join, relative } from 'path';
 import fs from 'fs';
 import { parse } from 'svelte/compiler';
 import unified from 'unified';
@@ -93,6 +93,7 @@ const defaults = {
 	extension: '.svx',
 	layout: false,
 	highlight: { highlighter: code_highlight },
+	layoutRoot: null,
 };
 
 function to_posix(_path) {
@@ -177,6 +178,7 @@ export const mdsvex = ({
 	layout = false,
 	highlight = { highlighter: code_highlight },
 	frontmatter,
+	layoutRoot = null,
 } = defaults) => {
 	let _layout = layout ? {} : layout;
 
@@ -193,7 +195,13 @@ export const mdsvex = ({
 
 	_layout = process_layouts(_layout);
 	// console.log(_layout);
-
+	// HACK: I have hacked this in here... it is hardly a perfect feature, but something like this
+	// would be nice!
+	if (typeof layoutRoot === 'string') {
+		for (const name in _layout) {
+			_layout[name].path = '/' + relative(layoutRoot, _layout[name].path);
+		}
+	}
 	const parser = transform({
 		remarkPlugins,
 		rehypePlugins,
